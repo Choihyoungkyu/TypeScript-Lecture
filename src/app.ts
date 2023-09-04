@@ -1,43 +1,41 @@
-class Department {
-  // private readonly id: string;
-  // private name: string;
-  private employees: string[] = [];
+function Logger(logString: string) {
+  console.log("LOGGER FACTORY");
+  return function (constructor: Function) {
+    console.log("LOGGER FUNCTION");
+    // console.log(logString);
+    // console.log(constructor);
+  };
+}
 
-  // public, private 축약형
-  constructor(private readonly id: string, private name: string) {
-    // this.id = id;
-    // this.name = name;
-  }
+function Damm() {
+  console.log("Damm FACTORY");
+  return function (_: Function) {
+    console.log("Damm FUNCTION");
+  };
+}
 
-  describe(this: Department) {
-    console.log(`Department (${this.id}): ${this.name}`);
-  }
+function WithTemplate(template: string, hookId: string) {
+  console.log("TEMPLATE FACTORY");
+  return function (_: Function) {
+    console.log("TEMPLATE FUNCTION");
+    const hookEl = document.getElementById(hookId);
+    if (hookEl) {
+      hookEl.innerHTML = template;
+    }
+  };
+}
 
-  addEmployee(employee: string) {
-    this.employees.push(employee);
-  }
+@Damm()
+@Logger("LOGGING - PERSON")
+@WithTemplate("<h1>My Person Object</h1>", "app")
+class Person {
+  name = "Max";
 
-  printEmployeeInformation() {
-    console.log(this.employees.length);
-    console.log(this.employees);
+  constructor() {
+    console.log("Creating person object...");
   }
 }
 
-class ITDepartment extends Department {
-  constructor(id: string, private admins: string[]) {
-    super(id, "IT");
-  }
-}
+const pers = new Person();
 
-const accounting = new Department("d1", "Accounting");
-const IT = new ITDepartment("d2", ["Max"]);
-
-accounting.addEmployee("Max");
-accounting.addEmployee("Manu");
-// accounting.employees[2] = 'Anna';  // private 속성이기 때문에 접근 불가!!
-
-accounting.describe();
-accounting.printEmployeeInformation();
-
-// const accountingCopy = { name: "DUMMY", describe: accounting.describe };
-// accountingCopy.describe();
+console.log(pers);
